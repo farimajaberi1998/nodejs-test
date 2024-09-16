@@ -1,0 +1,16 @@
+{
+  "name": "nodejs-test",
+  "version": "1.0.0",
+  "description": "this project is test",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "author": "farima_jaberi",
+  "license": "ISC",
+  "dependencies": {
+    "uuid": "^10.0.0"
+  }
+}
