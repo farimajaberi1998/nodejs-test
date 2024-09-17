@@ -1,11 +1,16 @@
 const express = require("express");
 const Logger = require("./Logger");
-const Auth = require("./auth")
+const Auth = require("./auth");
 const dotenv = require("dotenv").config();
 const app = express();
+const helmet = require("helmet");
+const morgan = require("morgan");
 app.use(express.json());
 app.use(Logger);
 app.use(Auth);
+app.use(helmet());
+
+app.use(express.urlencoded({ extended: true }));
 const courses = [
   {
     id: 1,
@@ -29,6 +34,9 @@ app.post("api/courses/:id", (req, res) => {
     res.status(400).send("name is required");
     return;
   }
+  if (app.get("env") === "development") {
+    app.use(morgan("tiny"));
+  }
   const course = {
     id: courses.length + 1,
     name: req.body.name,
@@ -37,29 +45,30 @@ app.post("api/courses/:id", (req, res) => {
   res.send(course);
 });
 
-
 //PUT METHOD//
-app.put("api/courses/:id",(req, res)=>{
-  const course = courses.find(c=> c.id === parseInt(req.params.id))
-  if(!course) return 
-  res.status(404).send("course with given id not found")
+app.put("api/courses/:id", (req, res) => {
+  const course = courses.find((c) => c.id === parseInt(req.params.id));
+  if (!course) return;
+  res.status(404).send("course with given id not found");
 
-  if(!req.body.name || req.body.length > 3)
-    return res.status(400).send("name is require and more than 3 character")
-  course.name = req.body.name
-  res.send(course)
-})
+  if (!req.body.name || req.body.length > 3)
+    return res.status(400).send("name is require and more than 3 character");
+  course.name = req.body.name;
+  res.send(course);
+});
 
 //DELETE METHOD//
-app.delete("api/courses/:id" , (req,res)=>{
-  const course = courses.find(c=> c.id === parseInt(req.params.id))
-  if(!course) return 
-  res.status(404).send("course with given id not found")
+app.delete("api/courses/:id", (req, res) => {
+  const course = courses.find((c) => c.id === parseInt(req.params.id));
+  if (!course) return;
+  res.status(404).send("course with given id not found");
 
-  const index = course.indexOf(course)
-  courses.splice(index,1)
-  res.send(course)
-})
+  const index = course.indexOf(course);
+  courses.splice(index, 1);
+  res.send(course);
+});
+
+
 
 const Port = process.env.APP_PORT || 3000;
 app.listen(Port, () => {
