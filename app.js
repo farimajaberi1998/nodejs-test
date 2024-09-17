@@ -13,6 +13,8 @@ const courses = [
     name: "js",
   },
 ];
+
+//GET METHOD//
 app.get("api/courses/:id", (req, res) => {
   const course = course.find((c) => c.id === parseInt(req.params.id));
   res.send(course);
@@ -45,6 +47,16 @@ app.put("api/courses/:id",(req, res)=>{
   res.send(course)
 })
 
+//DELETE METHOD//
+app.delete("api/courses/:id" , (req,res)=>{
+  const course = courses.find(c=> c.id === parseInt(req.params.id))
+  if(!course) return 
+  res.status(404).send("course with given id not found")
+
+  const index = course.indexOf(course)
+  courses.splice(index,1)
+  res.send(course)
+})
 
 const Port = process.env.APP_PORT || 3000;
 app.listen(Port, () => {
