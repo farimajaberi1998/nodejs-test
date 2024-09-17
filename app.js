@@ -1,8 +1,11 @@
 const express = require("express");
+const Logger = require("./Logger");
+const Auth = require("./auth")
 const dotenv = require("dotenv").config();
 const app = express();
 app.use(express.json());
-
+app.use(Logger);
+app.use(Auth);
 const courses = [
   {
     id: 1,
